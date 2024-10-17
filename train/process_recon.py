@@ -17,6 +17,9 @@ def main(args: argparse.Namespace):
         os.makedirs(output_dir)
 
     # get all the folders in the recon dataset
+    # 列出 recon_dir 目录下的所有文件和目录
+    # 如果 args.num_trajs 大于或等于0，只保留前 args.num_trajs 个文件名
+    # 这里 args.num_trajs 可能是一个命令行参数，用于指定你想要处理的轨迹数量。例如，如果你只想处理前5个轨迹，你可以通过命令行参数 --num_trajs 5 来设置这个值。
     filenames = os.listdir(recon_dir)
     if args.num_trajs >= 0:
         filenames = filenames[: args.num_trajs]
