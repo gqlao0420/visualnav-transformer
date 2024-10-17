@@ -25,17 +25,28 @@ def main(args: argparse.Namespace):
         filenames = filenames[: args.num_trajs]
 
     # processing loop
+    # 使用了 tqdm 库来显示一个进度条，该进度条在处理 filenames 列表中的每个元素时更新。
+    # tqdm 是一个快速，可扩展的Python进度条库，可以在长循环中添加一个进度条，以便用户可以实时看到进度。
     for filename in tqdm.tqdm(filenames, desc="Trajectories processed"):
         # extract the name without the extension
+        # 对于每个文件名，通过分割文件名并去除扩展名来提取轨迹名称（traj_name）
         traj_name = filename.split(".")[0]
         # load the hdf5 file
         try:
+            # 尝试打开位于 recon_dir 目录下的 HDF5 文件（使用 h5py.File），如果打开文件时发生 OSError 异常，则打印错误信息并跳过当前文件。
             h5_f = h5py.File(os.path.join(recon_dir, filename), "r")
         except OSError:
             print(f"Error loading {filename}. Skipping...")
             continue
         # extract the position and yaw data
+        # 从 HDF5 文件中提取 position 和 yaw 数据，并将它们保存到字典 traj_data 中
+        # 这行代码从 HDF5 文件中名为 h5_f 的组中读取 "jackal" 组内的 "position" 数据集。
+        # 使用 [:, :2] 这个切片操作符，它提取了 "position" 数据集中的所有行（代表不同的时间点或轨迹点）和前两列（通常代表 x 和 y 坐标）。
+        # 这样，position_data 变量就包含了机器人在二维空间中的轨迹位置数据。
         position_data = h5_f["jackal"]["position"][:, :2]
+        # 这行代码从相同的 "jackal" 组中读取 "yaw" 数据集。使用 [()] 这个操作符，它提取了整个 "yaw" 数据集的值。
+        # "yaw" 数据集通常包含机器人在每个时间点的方向数据，即机器人相对于某个参考方向（如正北）的旋转角度。
+        # yaw_data 变量因此包含了机器人的朝向信息。
         yaw_data = h5_f["jackal"]["yaw"][()]
         # save the data to a dictionary
         traj_data = {"position": position_data, "yaw": yaw_data}
