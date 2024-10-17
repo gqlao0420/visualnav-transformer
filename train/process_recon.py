@@ -8,6 +8,7 @@ import tqdm
 
 
 def main(args: argparse.Namespace):
+    # 这行代码的作用是将 args.input_dir 和 "recon_release" 连接起来，形成一个完整的目录路径，并将其存储在变量 recon_dir 中
     recon_dir = os.path.join(args.input_dir, "recon_release")
     output_dir = args.output_dir
 
