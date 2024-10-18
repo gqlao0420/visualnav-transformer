@@ -81,6 +81,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     # get arguments for the recon input dir and the output dir
     parser.add_argument(
+        # 指定 recon_dataset 的输入目录路径。这是一个必需参数，类型为字符串。
         "--input-dir",
         "-i",
         type=str,
@@ -88,6 +89,7 @@ if __name__ == "__main__":
         required=True,
     )
     parser.add_argument(
+        # 指定处理后的 recon_dataset 的输出目录路径。默认值为 datasets/recon/，类型为字符串。
         "--output-dir",
         "-o",
         default="datasets/recon/",
@@ -96,6 +98,7 @@ if __name__ == "__main__":
     )
     # number of trajs to process
     parser.add_argument(
+        # 指定要处理的轨迹数量。默认值为 -1，表示处理所有轨迹，类型为整数。
         "--num-trajs",
         "-n",
         default=-1,
