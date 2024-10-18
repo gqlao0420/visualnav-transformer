@@ -51,7 +51,21 @@ def main(args: argparse.Namespace):
         # save the data to a dictionary
         traj_data = {"position": position_data, "yaw": yaw_data}
         traj_folder = os.path.join(output_dir, traj_name)
+        # os.makedirs() 函数用于递归创建目录
+        # traj_folder：这是你想要创建的目录路径
+        # exist_ok=True：这个参数告诉 os.makedirs() 如果目录已经存在，则不要抛出异常。在默认情况下（即 exist_ok=False），
+        # 如果目标目录已经存在，os.makedirs() 会抛出一个 FileExistsError 异常。
+        # 设置 exist_ok=True 可以防止这种情况，使得即使目录已经存在，代码也不会出错，能够继续执行。
         os.makedirs(traj_folder, exist_ok=True)
+
+        # os.path.join(traj_folder, "traj_data.pkl")：这个函数调用将traj_folder变量（它包含了一个目录路径）和字符串"traj_data.pkl"（这是要创建的文件的名称）
+        # 连接起来，形成完整的文件路径。os.path.join函数可以确保路径在不同操作系统上正确无误，因为它会根据操作系统使用正确的路径分隔符。
+        # with open(..., "wb") as f：这是一个上下文管理器，它以二进制写入模式（"wb"）打开文件。with语句是Python中的一个语法糖，它可以确保文件在使用后正确关闭，
+        # 即使在写入数据时发生异常也是如此。
+        # pickle.dump(traj_data, f)：这个函数调用将traj_data字典序列化，并将序列化后的数据写入到之前打开的文件对象f中。
+        # pickle模块可以序列化Python中的许多数据类型，包括字典、列表、集合、类实例等。
+        # 总的来说，这段代码的作用是将traj_data字典保存到traj_folder目录下名为traj_data.pkl的文件中。这种序列化方法不仅保存了数据的内容，还保存了数据类型，
+        # 因此在之后读取文件并反序列化时，可以恢复原始的Python数据结构。
         with open(os.path.join(traj_folder, "traj_data.pkl"), "wb") as f:
             pickle.dump(traj_data, f)
         # make a folder for the file
