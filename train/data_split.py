@@ -27,19 +27,31 @@ def remove_files_in_dir(dir_path: str):
 
 def main(args: argparse.Namespace):
     # Get the names of the folders in the data directory that contain the file 'traj_data.pkl'
+    # 列表推导式，用于从指定的目录 args.data_dir 中筛选出满足特定条件的子目录名称.
     folder_names = [
         f
+        # 列出 args.data_dir 目录下的所有文件和子目录名称。
         for f in os.listdir(args.data_dir)
+        # 对于每个项 f，检查它是否是一个目录。这是通过将 args.data_dir 和 f 结合成完整的路径，并使用 os.path.isdir() 函数来完成的。
         if os.path.isdir(os.path.join(args.data_dir, f))
+        # 如果 f 是一个目录，进一步检查该目录中是否包含名为 "traj_data.pkl" 的文件。这同样是通过结合 args.data_dir 和 f 形成完整路径，并列出该目录下的所有文件来完成的。
         and "traj_data.pkl" in os.listdir(os.path.join(args.data_dir, f))
     ]
+    # folder_names = [...]： 将所有满足上述条件的目录名称收集到一个列表 folder_names 中。
+
 
     # Randomly shuffle the names of the folders
+    # random.shuffle 函数用于将一个列表中的元素随机打乱顺序。这个函数直接修改原始列表，而不返回新的列表。
     random.shuffle(folder_names)
 
     # Split the names of the folders into train and test sets
+    # 这段代码的目的是将 folder_names 列表分割成两个部分：train_folder_names 和 test_folder_names。
+    # 这通常用于机器学习中的数据集分割，其中一部分数据用于训练模型，另一部分用于测试模型。
+    # args.split 应该是一个介于 0 和 1 之间的小数，表示训练集占总数据集的比例。例如，如果 args.split 是 0.8，那么 80% 的数据将被用于训练，剩下的 20% 将被用于测试。
     split_index = int(args.split * len(folder_names))
+    # 将 folder_names 列表从开始到 split_index（不包括 split_index）的部分分配给 train_folder_names。这意味着 train_folder_names 包含了用于训练的文件夹名称。
     train_folder_names = folder_names[:split_index]
+    # 将 folder_names 列表从 split_index 到末尾的部分分配给 test_folder_names。
     test_folder_names = folder_names[split_index:]
 
     # Create directories for the train and test sets
